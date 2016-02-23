@@ -1,0 +1,11 @@
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.hostname = "Bamboo"
+  config.vm.provision "shell", path: "provision-service.sh"
+  config.vm.network "forwarded_port", guest: 8085, host: 8085, id: "Bamboo"
+  
+  config.vm.provider "virtualbox" do |vb|
+     vb.memory = "2048"
+     #vb.customize ["modifyhd", "b4e44e75-5afc-467a-a8aa-5c21f3315d4a", "--resize", "8096"]
+  end
+end
