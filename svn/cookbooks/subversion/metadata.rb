@@ -1,0 +1,10 @@
+name 'subversion'
+maintainer 'Steven Wade'
+maintainer_email 'wades@parliament.uk'
+license 'all_rights'
+description 'Installs/Configures template'
+long_description 'Installs/Configures template'
+version '0.0.1'
+
+depends 'apache2'
+depends 'windows'
