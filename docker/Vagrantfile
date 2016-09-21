@@ -1,0 +1,11 @@
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu/xenial64"
+  # config.vm.hostname = "docker"
+  # config.vm.provision "shell", path: "provision.sh"
+  
+  config.vm.provider "virtualbox" do |vb|
+     vb.memory = "4096"
+     vb.cpus = 2
+     #vb.customize ["modifyhd", "b4e44e75-5afc-467a-a8aa-5c21f3315d4a", "--resize", "8096"]
+  end
+end
