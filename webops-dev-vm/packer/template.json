@@ -1,0 +1,113 @@
+{
+    "variables": {
+        "ssh_name": "vagrant",
+        "ssh_pass": "vagrant",
+        "hostname": "packer-test"
+    },
+
+    "builders": [
+        {
+            "type": "virtualbox-iso",
+            "boot_command": [
+                "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "/install/vmlinuz",
+                " auto",
+                " console-setup/ask_detect=false",
+                " console-setup/layoutcode=gb",
+                " console-setup/modelcode=pc105",
+                " debconf/frontend=noninteractive",
+                " debian-installer=en_GB",
+                " fb=false",
+                " initrd=/install/initrd.gz",
+                " kbd-chooser/method=gb",
+                " keyboard-configuration/layout=UK",
+                " keyboard-configuration/variant=UK",
+                " locale=en_GB",
+                " netcfg/get_domain=vm",
+                " netcfg/get_hostname=vagrant",
+                " grub-installer/bootdev=/dev/sda",
+                " noapic",
+                " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+                " -- ",
+                "<enter><wait>"
+            ],
+            "boot_wait": "10s",
+            "disk_size": 262144,
+            "format": "ova",
+            "guest_os_type": "Ubuntu_64",
+            "http_directory": "http",
+            "iso_urls": [
+                "http://releases.ubuntu.com/16.04/ubuntu-16.04.1-server-amd64.iso"
+            ],
+            "iso_checksum_type": "sha256",
+            "iso_checksum": "29a8b9009509b39d542ecb229787cdf48f05e739a932289de9e9858d7c487c80",
+            "ssh_username": "vagrant",
+            "ssh_password": "vagrant",
+            "ssh_port": 22,
+            "ssh_wait_timeout": "10000s",
+            "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+            "virtualbox_version_file": ".vbox_version",
+            "vm_name": "packer-ubuntu-16.04-amd64",
+            "vboxmanage": [
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--memory",
+                    "1024"
+                ],
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--cpus",
+                    "2"
+                ]
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "mkdir -p ~/.ssh"
+            ]
+        },
+        {
+            "type": "file",
+            "source": "files/50-default-session.conf",
+            "destination": "/tmp/50-default-session.conf"
+        },
+        {
+            "type": "file",
+            "source": "files/authorized_keys",
+            "destination": ".ssh/authorized_keys"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "echo 'vagrant' | sudo -E -S mv /tmp/50-default-session.conf /etc/lightdm/lightdm.conf.d/50-default-session.conf",
+                "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' > /tmp/vagrant",
+                "echo 'vagrant' | sudo -E -S mv /tmp/vagrant /etc/sudoers.d/vagrant",
+                "echo 'vagrant' | sudo -E -S chmod 440 /etc/sudoers.d/vagrant",
+                "echo 'vagrant' | sudo -E -S chown root:root /etc/sudoers.d/vagrant",
+                "chmod -R go-rwx ~/.ssh",
+                "sudo apt-get -y install linux-headers-$(uname -r) build-essential dkms",
+                "sudo mkdir /media/VBoxGuestAdditions",
+                "sudo mount -o loop,ro `ls VBoxGuestAdditions*.iso` /media/VBoxGuestAdditions",
+                "sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run",
+                "sudo umount /media/VBoxGuestAdditions",
+                "sudo rmdir /media/VBoxGuestAdditions",
+                "rm VBoxGuestAdditions*.iso"
+            ]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "vagrant",
+            "compression_level": 9
+        }
+    ]
+}

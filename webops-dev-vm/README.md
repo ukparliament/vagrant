@@ -22,8 +22,6 @@ Initialising
 Before creating the machine, ensure that you have the following files
 in place on your host machine:
 
- * A .gitconfig file in your home directory with any Git settings that
-   you wish to use.
  * An .aws folder in your home directory containing your AWS settings.
    This can be created by installing the AWS command line tools and
    running `aws configure`.
