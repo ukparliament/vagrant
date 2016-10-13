@@ -95,12 +95,7 @@
                 "echo 'vagrant' | sudo -E -S chown root:root /etc/sudoers.d/vagrant",
                 "chmod -R go-rwx ~/.ssh",
                 "sudo apt-get -y install linux-headers-$(uname -r) build-essential dkms",
-                "sudo mkdir /media/VBoxGuestAdditions",
-                "sudo mount -o loop,ro `ls VBoxGuestAdditions*.iso` /media/VBoxGuestAdditions",
-                "sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run",
-                "sudo umount /media/VBoxGuestAdditions",
-                "sudo rmdir /media/VBoxGuestAdditions",
-                "rm VBoxGuestAdditions*.iso"
+                "sudo apt-get -y install virtualbox-guest-dkms"
             ]
         }
     ],
