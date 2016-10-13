@@ -5,14 +5,15 @@ This repository contains a Vagrant file to build and initialise a
 VirtualBox machine for webops development.
 
 The machine has the following features
-1. Base image: Linux Mint 18
-2. Docker ("vagrant" user is granted to run docker)
-3. Git (major UKPDS repos are cloned to ~/abc/github)
-4. Vim
-5. AWS CLI
-6. Keepassx
-7. Terraform 0.7.4
-8. Visual Studio Code
+
+ 1. Base image: Linux Mint 18
+ 2. Docker ("vagrant" user is granted to run docker)
+ 3. Git (major UKPDS repos are cloned to ~/abc/github)
+ 4. Vim
+ 5. AWS CLI
+ 6. Keepassx
+ 7. Terraform 0.7.4
+ 8. Visual Studio Code
 
 You will need to have the latest version of Vagrant installed on your
 host machine.
