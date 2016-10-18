@@ -84,10 +84,11 @@ Vagrant.configure("2") do |config|
     apt-get -y install git docker.io docker-compose docker-registry vim vim-gtk3 awscli keepassx curl
     usermod -a -G docker vagrant
 
-    curl -L https://go.microsoft.com/fwlink/?LinkID=760868 > /tmp/vscode.deb
+    curl -s -L https://go.microsoft.com/fwlink/?LinkID=760868 > /tmp/vscode.deb
     dpkg -i /tmp/vscode.deb
     rm /tmp/vscode.deb
-    curl https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip > /tmp/terraform.zip
+    TERRAFORM_URL=$(curl -s https://www.terraform.io/downloads.html | grep -oe https://releases\.hashicorp\.com/.*terraform.*/.*linux_amd64\.zip)
+    curl -s $TERRAFORM_URL > /tmp/terraform.zip
     unzip /tmp/terraform.zip -d /usr/local/bin
     rm /tmp/terraform.zip
 
@@ -114,7 +115,7 @@ Vagrant.configure("2") do |config|
 
     # Install the "dos" command so you can type dos code . to run VS Code from current directory
 
-    curl https://gist.githubusercontent.com/jammycakes/34c71119ef248f63eaa2239c110513f5/raw/5983b6f37977c6fdc210903409bff4a422d26a99/.bashrc | tail -n +2 >> /home/vagrant/.bashrc
+    curl -s https://gist.githubusercontent.com/jammycakes/34c71119ef248f63eaa2239c110513f5/raw/5983b6f37977c6fdc210903409bff4a422d26a99/.bashrc | tail -n +2 >> /home/vagrant/.bashrc
 
     chown -R vagrant:vagrant /home/vagrant
   SHELL
